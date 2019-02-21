@@ -2,7 +2,7 @@ import React from "react"
 import { makeObs, computed } from "../../";
 
 class AppStore {
-  
+
   test1 = makeObs(0);
   test2 = makeObs(0);
   someData = makeObs(null);
@@ -18,6 +18,8 @@ class AppStore {
   );
 
   // sample fetching data
+  // purposely using fetch instead of rxjs to get data
+  // to illustrate that you don't need to know rxjs to use react-obs
   fetchSomeData () {
     fetch("https://randomuser.me/api/")
     .then(data => data.json())

@@ -2,14 +2,16 @@
 A react store built on top of rxjs &amp; hooks
 
 ## goals
-* simple API
-* render individual components in response to state change in store
+* Familiar - useState() like API
+* Render individual components in response to state change in store
+* No magic, just streams
+* Don't need to know rxjs to use, but can use easily if you want to
 
 _No plans for deep object compare, only shallow compare is supported at the moment_
 
 ## install
 ```
-npm i react-obs --save
+npm i react-obs rxjs --save
 ```
 
 ## usage
