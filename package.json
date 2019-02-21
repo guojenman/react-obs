@@ -1,0 +1,36 @@
+{
+  "name": "react-obs",
+  "version": "0.1.0",
+  "description": "A react store built on top of rxjs & hooks",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/guojenman/react-obs.git"
+  },
+  "keywords": [
+    "react",
+    "rxjs",
+    "hooks"
+  ],
+  "author": "Miguel Guojian Wu",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/guojenman/react-obs/issues"
+  },
+  "homepage": "https://github.com/guojenman/react-obs#readme",
+  "devDependencies": {
+    "react": "16.8.2",
+    "react-dom": "16.8.2",
+    "react-scripts": "2.1.5"
+  },
+  "engines": {
+    "node": ">=8",
+    "npm": ">=5"
+  },
+  "dependencies": {
+    "rxjs": "6.4.0"
+  }
+}
