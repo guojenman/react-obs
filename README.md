@@ -36,3 +36,5 @@ return (
   </>
 )
 ```
+
+**See example folder for a more detailed example**
