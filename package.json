@@ -1,6 +1,6 @@
 {
   "name": "react-obs",
-  "version": "0.1.03",
+  "version": "0.1.4",
   "description": "A react store built on top of rxjs & hooks",
   "main": "index.js",
   "scripts": {
