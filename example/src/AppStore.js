@@ -6,6 +6,7 @@ class AppStore {
   test1 = makeObs(0);
   test2 = makeObs(0);
   someData = makeObs(null);
+  showDataComponent = makeObs(true);
 
   // computed value w/ explicit depdencies
   computedVal1 = computed(

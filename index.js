@@ -32,7 +32,7 @@ export const useObs = (observable) => {
   const setValEnhanced = v => observable.next(v)
   useEffect(() => {
     const subs = observable.subscribe(setVal);
-    return () => subs();
+    return () => subs.unsubscribe();
   }, [])
   return [val, setValEnhanced];
 }
