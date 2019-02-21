@@ -7,8 +7,12 @@ A react store built on top of rxjs &amp; hooks
 
 _No plans for deep object compare, only shallow compare is supported at the moment_
 
-## example
+## install
+```
+npm i react-obs --save
+```
 
+## usage
 Store
 ```Javascript
 class AppStore {
