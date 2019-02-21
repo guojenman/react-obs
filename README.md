@@ -5,7 +5,7 @@ A react store built on top of rxjs &amp; hooks
 * Familiar - useState() like API
 * Render individual components in response to state change in store
 * No magic, just streams
-* Don't need to know rxjs to use, but can use easily if you want to
+* Don't need to know rxjs to use with react-obs, but you can if you want to
 
 _No plans for deep object compare, only shallow compare is supported at the moment_
 
@@ -15,6 +15,8 @@ npm i react-obs rxjs --save
 ```
 
 ## usage
+**See example folder for a working demo**
+
 Store
 ```Javascript
 class AppStore {
@@ -33,14 +35,14 @@ Component
 ```JSX
 const appStore = useContext(AppContext);
 const [val, setVal] = useObs(appStore.test1);
+// can't set a computed value, so just the getter
 const [doubleTest1] = useObs(appStore.doubleTest1);
 return (
   <>
     <div>test1 value from the store is {val}</div>
-    <div>and double that is {val}</div>
+    <div>and double that, is {doubleTest1}</div>
     <button onClick={() => setVal(val + 1)}>add 1</button>
   </>
 )
 ```
 
-**See example folder for a more detailed example**
