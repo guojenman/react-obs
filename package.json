@@ -1,6 +1,6 @@
 {
   "name": "react-obs",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "A react store built on top of rxjs & hooks",
   "main": "index.js",
   "scripts": {
@@ -13,7 +13,12 @@
   "keywords": [
     "react",
     "rxjs",
-    "hooks"
+    "hooks",
+    "streams",
+    "reactive",
+    "state management",
+    "observable",
+    "model"
   ],
   "author": "Miguel Guojian Wu",
   "license": "MIT",

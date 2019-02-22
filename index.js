@@ -25,13 +25,50 @@ export const makeObs = (initialValue) => new BehaviorSubject(initialValue);
 /**
  * Consume observables using the same API as useState()
  * @param {*} observable
- * @return [getter, setter]
+ * @returns {[*, Function]} [getter, setter]
  */
 export const useObs = (observable) => {
   const [val, setVal] = useState(getLastValue(observable))
   const setValEnhanced = v => observable.next(v)
   useEffect(() => {
     const subs = observable.subscribe(setVal);
+    return () => subs.unsubscribe();
+  }, [])
+  return [val, setValEnhanced];
+}
+
+/**
+ * Observe a field nested inside an object.
+ * This doesnt really watch the field itself, but the root level of the object
+ * What we're doing here is simplying plucking the value for you when the object
+ * reference changes
+ * 
+ * When you call setValue, we're re-recreating the whole object with your value change
+ * and pushing this new reference down the stream
+ * 
+ * Caveat: You can not change a field that does not exist.
+ * 
+ * @param {*} observable 
+ * @param {*} jsonPath 
+ * @returns {[*, Function]} [getter, setter]
+ */
+export const useObsDeep = (observable, jsonPath) => {
+  if (!jsonPath || typeof jsonPath !== "string" || jsonPath.length === 0) {
+    throw new Error("useObsDeep: a string jsonPath is required");
+  }
+  const [val, setVal] = useState(getLastValue(observable))
+  const setValEnhanced = v => {
+    let copy = JSON.parse(JSON.stringify(getLastValue(observable)));
+    let paths = jsonPath.split(".");
+    let fieldName = paths.pop();
+    let objectRef = paths.reduce((acc, curr) => acc[curr] || {}, copy || {});
+    objectRef[fieldName] = v;
+    observable.next(copy)
+  }
+  useEffect(() => {
+    const subs = observable.subscribe(
+      v => setVal(valueInObjectByPath(v, jsonPath))
+    );
     return () => subs.unsubscribe();
   }, [])
   return [val, setValEnhanced];
