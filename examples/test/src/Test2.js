@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { AppContext } from "./AppStore";
-import { useObs } from "../../";
+import { useObs } from "../../../";
 
 export default function Test2 () {
   console.log("render 2")

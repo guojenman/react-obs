@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { AppContext } from "./AppStore";
-import { useObsDeep } from "../../";
+import { useObsDeep } from "../../../";
 
 export default function TestDisplayData() {
   console.log("render data")

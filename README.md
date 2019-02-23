@@ -14,7 +14,7 @@ npm i react-obs rxjs --save
 ```
 
 ## usage
-**See example folder for a working demo**
+**See examples folder for a working demos**
 
 Store
 ```Javascript
@@ -27,7 +27,8 @@ class AppStore {
   
 }
 export const appStore = new AppStore();
-export const AppContext = React.createContext();
+// we pass appStore here just for intellisense, but the real value is passed to the Provider
+export const AppContext = React.createContext(appStore);
 ```
 Provide the store for you app
 ```JSX

@@ -3,7 +3,7 @@ import { AppContext } from './AppStore';
 import Test1 from './Test1';
 import Test2 from './Test2';
 import TestDisplayData from './TestDisplayData';
-import { useObs } from '../../';
+import { useObs } from '../../../';
 
 
 export default function App() {

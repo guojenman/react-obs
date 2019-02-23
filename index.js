@@ -2,7 +2,12 @@ import { BehaviorSubject, combineLatest } from "rxjs";
 import { map, take } from "rxjs/operators";
 import { useEffect, useState } from "react";
 
-const getLastValue = (obs) => {
+/**
+ * Get the current value from an observable
+ * @param {*} obs 
+ * @returns {*}
+ */
+export const getValue = (obs) => {
   let lastValue;
   obs.pipe(take(1)).subscribe(v => lastValue = v)
   return lastValue;
@@ -28,8 +33,14 @@ export const makeObs = (initialValue) => new BehaviorSubject(initialValue);
  * @returns {[*, Function]} [getter, setter]
  */
 export const useObs = (observable) => {
-  const [val, setVal] = useState(getLastValue(observable))
-  const setValEnhanced = v => observable.next(v)
+  const [val, setVal] = useState(getValue(observable))
+  const setValEnhanced = v => {
+    if (typeof v === "function") {
+      observable.next(v(getValue(observable)));
+    } else {
+      observable.next(v)
+    }
+  }
   useEffect(() => {
     const subs = observable.subscribe(setVal);
     return () => subs.unsubscribe();
@@ -56,13 +67,17 @@ export const useObsDeep = (observable, jsonPath) => {
   if (!jsonPath || typeof jsonPath !== "string" || jsonPath.length === 0) {
     throw new Error("useObsDeep: a string jsonPath is required");
   }
-  const [val, setVal] = useState(getLastValue(observable))
+  const [val, setVal] = useState(getValue(observable))
   const setValEnhanced = v => {
-    let copy = JSON.parse(JSON.stringify(getLastValue(observable)));
+    let copy = JSON.parse(JSON.stringify(getValue(observable)));
     let paths = jsonPath.split(".");
     let fieldName = paths.pop();
     let objectRef = paths.reduce((acc, curr) => acc[curr] || {}, copy || {});
-    objectRef[fieldName] = v;
+    if (typeof v === "function") {
+      objectRef[fieldName] = v(getValue(observable));
+    } else {
+      objectRef[fieldName] = v;
+    }
     observable.next(copy)
   }
   useEffect(() => {
@@ -92,7 +107,7 @@ export const computed = (fn, obsArrayOrStoreInstance) => {
   let arr = !Array.isArray(obsArrayOrStoreInstance)
     ? collectObservables(obsArrayOrStoreInstance)
     : obsArrayOrStoreInstance;
-  return combineLatest(arr)
+  const obs = combineLatest(arr)
     .pipe(
       map(vals => {
         if (arr.__names) {
@@ -106,6 +121,8 @@ export const computed = (fn, obsArrayOrStoreInstance) => {
         }
       })
     );
+  obs.getValue = () => getValue(obs);
+  return obs;
 }
 
 /**
