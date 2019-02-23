@@ -27,10 +27,17 @@ class AppStore {
   
 }
 export const appStore = new AppStore();
-export const AppContext = React.createContext(appStore);
+export const AppContext = React.createContext();
 ```
-
-Component
+Provide the store for you app
+```JSX
+ReactDOM.render(
+  <AppContext.Provider value={appStore}>
+    <App />
+  </AppContext.Provider>
+, document.getElementById('root'));
+```
+A child Component somewhere down the tree
 ```JSX
 const appStore = useContext(AppContext);
 const [val, setVal] = useObs(appStore.test1);
