@@ -3,10 +3,10 @@ A react store built on top of rxjs &amp; hooks
 
 ## goals
 * Familiar - useState() like API
-* Render individual components in response to state and no other component
 * No magic, just streams
+* Render only components whose values that have changed, no other components are re-rendered
 * Don't need to know rxjs to use with react-obs, but you can if you want to
-* Tiny
+* Small, minimal library
 
 ## install
 ```
@@ -60,3 +60,9 @@ return (
 * **computed**: watch one ore more observables and return a computed value from them
 
 **for more doc, for now read the code in index.js, it's a tiny file.**
+
+## FAQ
+* How do I mutate a value?
+  * myValue = makeObs(0) // creates the observable  
+  myValue.next(1) // mutate your data (by pushing a new value in the stream)
+
