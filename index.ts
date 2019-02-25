@@ -1,7 +1,7 @@
 import { BehaviorSubject, combineLatest, Subject } from "rxjs";
 import { map, take } from "rxjs/operators";
 import { useEffect, useState } from "react";
-
+type O<T> = BehaviorSubject<T>;
 
 /**
  * Get the current value from an observable
@@ -90,6 +90,22 @@ export const useObsDeep = <T>(observable: Subject<T>, jsonPath: string): [T, (v:
   return [val, setValEnhanced];
 }
 
+
+// overload typings for computed()
+// ------ For passing the entire store to the computed function
+export function computed<V>(fn: (v: any) => V, obsArrayOrStoreInstance: any): O<V>
+export function computed<V, S>(fn: (v: S) => V, obsArrayOrStoreInstance: S): O<V>
+// ------ For passing an array of observales to the computed function
+export function computed<V, T>(fn: (v: [T]) => V, obsArrayOrStoreInstance: [O<T>]): O<V>
+export function computed<V, T, T1>(fn: (v: [T, T1]) => V, obsArrayOrStoreInstance: [O<T>, O<T1>]): O<V>
+export function computed<V, T, T1, T2>(fn: (v: [T, T1, T2]) => V, obsArrayOrStoreInstance: [O<T>, O<T1>, O<T2>]): O<V>
+export function computed<V, T, T1, T2, T3>(fn: (v: [T, T1, T2, T3]) => V, obsArrayOrStoreInstance: [O<T>, O<T1>, O<T2>, O<T3>]): O<V>
+export function computed<V, T, T1, T2, T3, T4>(fn: (v: [T, T1, T2, T3, T4]) => V, obsArrayOrStoreInstance: [O<T>, O<T1>, O<T2>, O<T3>, O<T4>]): O<V>
+export function computed<V, T, T1, T2, T3, T4, T5>(fn: (v: [T, T1, T2, T3, T4, T5]) => V, obsArrayOrStoreInstance: [O<T>, O<T1>, O<T2>, O<T3>, O<T4>, O<T5>]): O<V>
+export function computed<V, T, T1, T2, T3, T4, T5, T6>(fn: (v: [T, T1, T2, T3, T4, T5, T6]) => V, obsArrayOrStoreInstance: [O<T>, O<T1>, O<T2>, O<T3>, O<T4>, O<T5>, O<T6>]): O<V>
+export function computed<V, T, T1, T2, T3, T4, T5, T6, T7>(fn: (v: [T, T1, T2, T3, T4, T5, T6, T7]) => V, obsArrayOrStoreInstance: [O<T>, O<T1>, O<T2>, O<T3>, O<T4>, O<T5>, O<T6>, O<T7>]): O<V>
+export function computed<V, T, T1, T2, T3, T4, T5, T6, T7, T8>(fn: (v: [T, T1, T2, T3, T4, T5, T6, T7, T8]) => V, obsArrayOrStoreInstance: [O<T>, O<T1>, O<T2>, O<T3>, O<T4>, O<T5>, O<T6>, O<T7>, O<T8>]): O<V>
+export function computed<V, T, T1, T2, T3, T4, T5, T6, T7, T8, T9>(fn: (v: [T, T1, T2, T3, T4, T5, T6, T7, T8, T9]) => V, obsArrayOrStoreInstance: [O<T>, O<T1>, O<T2>, O<T3>, O<T4>, O<T5>, O<T6>, O<T7>, O<T8>, O<T9>]): O<V>
 /**
  * Compute a value from 1 or more observables.
  * 
@@ -104,7 +120,7 @@ export const useObsDeep = <T>(observable: Subject<T>, jsonPath: string): [T, (v:
  * @param {*} obsArrayOrStoreInstance
  * @return Observable
  */
-export const computed = <T>(fn: (v: any) => T, obsArrayOrStoreInstance: any): BehaviorSubject<T> => {
+export function computed(fn: Function, obsArrayOrStoreInstance: any) {
   let names: string[] = [];
   let arr: Subject<any>[] = [];
   if (Array.isArray(obsArrayOrStoreInstance)) {
@@ -127,8 +143,8 @@ export const computed = <T>(fn: (v: any) => T, obsArrayOrStoreInstance: any): Be
           return fn(vals);
         }
       })
-    ) as BehaviorSubject<T>;
-  obs.getValue = () => getValue(obs as BehaviorSubject<T>);
+    ) as BehaviorSubject<any>;
+  obs.getValue = () => getValue(obs);
   return obs;
 }
 

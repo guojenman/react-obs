@@ -1,3 +1,5 @@
+# 0.2.4
+* proper typings for computed()
 # 0.2.1
 * typescript typings
 * add examples/todo-ts

@@ -18,7 +18,7 @@ class TodoStore {
 
   filter = makeObs<number>(FILTERS.ALL)
   todos = makeObs<ITodoItem[]>([])
-  todoLeft = computed<number>(([v]) => v.filter(t => !t.competed).length, [this.todos]);
+  todoLeft = computed<number, ITodoItem[]>(([v]) => v.filter(t => !t.completed).length, [this.todos]);
 
   addTodo = name => {
     this.todos.next([
