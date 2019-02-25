@@ -35,7 +35,6 @@
     "@types/react": "16.8.4",
     "autoprefixer": "9.4.8",
     "classnames": "2.2.6",
-    "install": "0.12.2",
     "npm": "6.8.0",
     "parcel-bundler": "1.11.0",
     "react": "16.8.2",
