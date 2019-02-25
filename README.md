@@ -59,7 +59,7 @@ return (
 * **useObsDeep**: same as useObs but with a jsonPath option to pluck and set value deeply nested in an object
 * **computed**: watch one ore more observables and return a computed value from them
 
-**for more doc, for now read the code in index.js, it's a tiny file.**
+**for more doc, for now read the code in index.ts, it's a tiny file.**
 
 ## FAQ
 1. How do I mutate a value?  
