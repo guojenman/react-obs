@@ -1,10 +1,11 @@
 {
   "name": "react-obs",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "A react store built on top of rxjs & hooks",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc"
   },
   "repository": {
     "type": "git",
@@ -30,6 +31,7 @@
     "@babel/core": "7.3.3",
     "@babel/plugin-proposal-class-properties": "7.3.3",
     "@babel/preset-react": "7.0.0",
+    "@types/react": "16.8.4",
     "autoprefixer": "9.4.8",
     "classnames": "2.2.6",
     "install": "0.12.2",
@@ -38,7 +40,8 @@
     "react": "16.8.2",
     "react-dom": "16.8.2",
     "rxjs": "6.4.0",
-    "todomvc-app-css": "2.2.0"
+    "todomvc-app-css": "2.2.0",
+    "typescript": "3.3.3333"
   },
   "engines": {
     "node": ">=8",

@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import { makeObs, computed } from "../../../dist/";
+import { makeObs, computed } from "../../../dist";
 
 export const FILTERS = {
   ALL: 0,
@@ -7,12 +7,18 @@ export const FILTERS = {
   COMPLETED: 2
 }
 
+export interface ITodoItem {
+  id: number,
+  name: string;
+  completed: boolean
+}
+
 class TodoStore {
   __todoId = 0;
 
-  filter = makeObs(FILTERS.ALL)
-  todos = makeObs([])
-  todoLeft = computed(([v]) => v.filter(t => !t.competed).length, [this.todos]);
+  filter = makeObs<number>(FILTERS.ALL)
+  todos = makeObs<ITodoItem[]>([])
+  todoLeft = computed<number>(([v]) => v.filter(t => !t.competed).length, [this.todos]);
 
   addTodo = name => {
     this.todos.next([

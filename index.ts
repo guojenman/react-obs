@@ -1,16 +1,17 @@
-import { BehaviorSubject, combineLatest } from "rxjs";
+import { BehaviorSubject, combineLatest, Subject } from "rxjs";
 import { map, take } from "rxjs/operators";
 import { useEffect, useState } from "react";
+
 
 /**
  * Get the current value from an observable
  * @param {*} obs 
  * @returns {*}
  */
-export const getValue = (obs) => {
-  let lastValue;
+export const getValue = <T>(obs: Subject<T>): T => {
+  let lastValue: T;
   obs.pipe(take(1)).subscribe(v => lastValue = v)
-  return lastValue;
+  return lastValue!;
 }
 
 /**
@@ -18,24 +19,24 @@ export const getValue = (obs) => {
  * @param {*} object 
  * @param {*} path 
  */
-export const valueInObjectByPath = (object, path) => path.split('.').reduce((o, i) => !!o ? o[i] : '', object);
+export const valueInObjectByPath = <T>(object: Object, path: string): T => path.split('.').reduce((o: any, i) => !!o ? o[i] : '', object) as T;
 
 /**
  * Create an observable with the inital value provided
  * @param {*} initialValue
  * @returns BehaviorSubject
  */
-export const makeObs = (initialValue) => new BehaviorSubject(initialValue);
+export const makeObs = <T>(initialValue: T): BehaviorSubject<T> => new BehaviorSubject(initialValue);
 
 /**
  * Consume observables using the same API as useState()
  * @param {*} observable
  * @returns {[*, Function]} [getter, setter]
  */
-export const useObs = (observable) => {
+export const useObs = <T>(observable: Subject<T>): [T, (v: T | ((v: T) => T)) => void] => {
   const [val, setVal] = useState(getValue(observable))
-  const setValEnhanced = v => {
-    if (typeof v === "function") {
+  const setValEnhanced = (v: T | ((v: T) => T)) => {
+    if (v instanceof Function) {
       observable.next(v(getValue(observable)));
     } else {
       observable.next(v)
@@ -63,17 +64,17 @@ export const useObs = (observable) => {
  * @param {*} jsonPath 
  * @returns {[*, Function]} [getter, setter]
  */
-export const useObsDeep = (observable, jsonPath) => {
+export const useObsDeep = <T>(observable: Subject<T>, jsonPath: string): [T, (v: T | ((v: T) => T)) => void] => {
   if (!jsonPath || typeof jsonPath !== "string" || jsonPath.length === 0) {
     throw new Error("useObsDeep: a string jsonPath is required");
   }
   const [val, setVal] = useState(getValue(observable))
-  const setValEnhanced = v => {
+  const setValEnhanced = (v: T | ((v: T) => T)) => {
     let copy = JSON.parse(JSON.stringify(getValue(observable)));
     let paths = jsonPath.split(".");
-    let fieldName = paths.pop();
+    let fieldName = paths.pop()!;
     let objectRef = paths.reduce((acc, curr) => acc[curr] || {}, copy || {});
-    if (typeof v === "function") {
+    if (v instanceof Function) {
       objectRef[fieldName] = v(getValue(observable));
     } else {
       objectRef[fieldName] = v;
@@ -103,15 +104,21 @@ export const useObsDeep = (observable, jsonPath) => {
  * @param {*} obsArrayOrStoreInstance
  * @return Observable
  */
-export const computed = (fn, obsArrayOrStoreInstance) => {
-  let arr = !Array.isArray(obsArrayOrStoreInstance)
-    ? collectObservables(obsArrayOrStoreInstance)
-    : obsArrayOrStoreInstance;
+export const computed = <T>(fn: (v: any) => T, obsArrayOrStoreInstance: any): BehaviorSubject<T> => {
+  let names: string[] = [];
+  let arr: Subject<any>[] = [];
+  if (Array.isArray(obsArrayOrStoreInstance)) {
+    arr = obsArrayOrStoreInstance;
+  } else {
+    let collected = collectObservables(obsArrayOrStoreInstance);
+    arr = collected.observables;
+    names = collected.names;
+  }
   const obs = combineLatest(arr)
     .pipe(
       map(vals => {
-        if (arr.__names) {
-          const o = arr.__names.reduce((acc, curr, i) => {
+        if (names.length) {
+          const o = names.reduce((acc: any, curr, i) => {
             acc[curr] = vals[i];
             return acc;
           }, {})
@@ -120,8 +127,8 @@ export const computed = (fn, obsArrayOrStoreInstance) => {
           return fn(vals);
         }
       })
-    );
-  obs.getValue = () => getValue(obs);
+    ) as BehaviorSubject<T>;
+  obs.getValue = () => getValue(obs as BehaviorSubject<T>);
   return obs;
 }
 
@@ -131,12 +138,11 @@ export const computed = (fn, obsArrayOrStoreInstance) => {
  * @param {*} target 
  * @return BehaviorSubject[]
  */
-function collectObservables(target) {
+function collectObservables(target: any) {
   const names = Object.getOwnPropertyNames(target).filter(name => {
     return name.charAt(0) !== "_"
       && target[name] instanceof BehaviorSubject;
   })
   const observables = names.map(name => target[name]);
-  observables.__names = names;
-  return observables;
+  return { observables, names };
 }

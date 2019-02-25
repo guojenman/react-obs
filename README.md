@@ -62,7 +62,12 @@ return (
 **for more doc, for now read the code in index.js, it's a tiny file.**
 
 ## FAQ
-* How do I mutate a value?
-  * myValue = makeObs(0) // creates the observable  
+1. How do I mutate a value?  
+  
+    myValue = makeObs(0) // creates the observable  
   myValue.next(1) // mutate your data (by pushing a new value in the stream)
 
+2. Why not using object getter/setter functions to make reading and setting values more natural?
+  
+    I wanted to keep the ability to easily use rxjs and calling getValue() & next(), seemed like small price to pay
+  

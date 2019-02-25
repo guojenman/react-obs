@@ -1,5 +1,5 @@
 import React from "react"
-import { makeObs, computed } from "../../../";
+import { makeObs, computed } from "../../../dist/";
 
 class AppStore {
 

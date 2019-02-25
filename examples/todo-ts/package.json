@@ -1,0 +1,29 @@
+{
+  "name": "todo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "../../node_modules/.bin/parcel serve ./src/index.html --out-dir ./build/"
+  },
+  "author": "",
+  "license": "ISC",
+  "postcss": {
+    "modules": false,
+    "plugins": {
+      "postcss-nested": {},
+      "autoprefixer": {
+        "browsers": [
+          ">1%",
+          "last 4 versions",
+          "Firefox ESR",
+          "not ie < 9"
+        ],
+        "flexbox": "no-2009"
+      }
+    }
+  },
+  "devDependencies": {
+    "@babel/core": "7.3.3"
+  }
+}
