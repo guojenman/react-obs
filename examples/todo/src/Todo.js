@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
 import { TodoContext, FILTERS } from "./TodoStore";
-import { useObs } from "../../..";
+import { useObs } from "../../../dist/";
 import TodoItem from "./TodoItem";
 
 export default function Todo() {
